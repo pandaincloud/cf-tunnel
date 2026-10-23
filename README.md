@@ -55,7 +55,9 @@ node --test tests/*.test.cjs
 node --input-type=module --check < _worker.js
 ```
 
-回归测试覆盖订阅来源故障、节点隔离、TCP 回落、流关闭顺序和 UUID 必填保护。自动测试不代表已完成 Cloudflare 线上或手机验证。
+回归测试覆盖订阅来源故障、节点隔离、TCP 回落、流关闭顺序、Cloudflare 新环境的 Blob 二进制消息兼容和 UUID 必填保护。自动测试不代表已完成 Cloudflare 线上或手机验证。
+
+已显式设置 WebSocket 的 `binaryType`，并按接收顺序转换 Blob，兼容 Cloudflare 自 2026-03-17 起的新默认行为。参见 [官方变更说明](https://developers.cloudflare.com/changelog/post/2026-04-21-websocket-standard-binary-type/)。
 
 ## 来源与许可
 

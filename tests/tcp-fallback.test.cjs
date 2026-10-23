@@ -213,3 +213,27 @@ test('failed direct and fallback writes close the tunnel without an unhandled pr
   pair.getServer().receive(initialVlessFrame([1]));
   await eventually(() => pair.getServer().closes === 1);
 });
+
+test('Cloudflare Blob messages are converted to bytes in frame order', async () => {
+  const writes = [];
+  const upstream = socket({ pending: true });
+  upstream.writable = new WritableStream({ write(data) {
+    assert.ok(data instanceof ArrayBuffer || ArrayBuffer.isView(data), 'TCP writes must receive bytes');
+    writes.push([...new Uint8Array(data)]);
+  } });
+  const pair = fakeWebSocketPair();
+  const worker = loadWorker(() => upstream, {
+    WebSocketPair: pair.Pair,
+    Response: class { constructor(body, init) { Object.assign(this, init); } },
+  });
+  await worker.websocketHandler(new Request('https://worker.example/'), {
+    userID: '11111111-1111-4111-8111-111111111111', proxyIP: 'fallback.example', socks5: null,
+  });
+  pair.getServer().receive(new Blob([initialVlessFrame([1])]));
+  pair.getServer().receive(new Blob([Uint8Array.of(2)]));
+  await eventually(() => writes.length === 2);
+  assert.equal(pair.getServer().binaryType, 'arraybuffer');
+  assert.deepEqual(writes, [[1], [2]]);
+  assert.equal(pair.getServer().closes, 0);
+  upstream.close();
+});

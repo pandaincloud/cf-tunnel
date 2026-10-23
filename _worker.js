@@ -278,6 +278,8 @@ async function vlessOverWSHandler(request, connectionOptions) {
 	const webSocketPair = new WebSocketPair();
 	const [client, webSocket] = Object.values(webSocketPair);
 
+	// Newer Workers deliver binary messages as Blob unless explicitly configured.
+	webSocket.binaryType = 'arraybuffer';
 	// 接受 WebSocket 连接
 	webSocket.accept();
 
@@ -304,6 +306,8 @@ async function vlessOverWSHandler(request, connectionOptions) {
 	// WebSocket 数据流向远程服务器的管道
 	readableWebSocketStream.pipeTo(new WritableStream({
 		async write(chunk, controller) {
+			// Keep conversion inside the ordered write queue, including initial headers.
+			if (chunk instanceof Blob) chunk = await chunk.arrayBuffer();
 			if (isDns) {
 				// 如果是 DNS 查询，调用 DNS 处理函数
 				return await handleDNSQuery(chunk, webSocket, null, log);
