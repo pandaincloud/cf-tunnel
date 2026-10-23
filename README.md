@@ -62,3 +62,4 @@ node --input-type=module --check < _worker.js
 ## 来源与许可
 
 保留原项目 Apache-2.0 许可及源文件署名，详见 `LICENSE`、`NOTICE`。
+订阅请使用项目固定的 pages.dev 域名；含部署编号的域名固定在某次部署，不会自动采用后续修复。
