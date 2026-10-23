@@ -1,0 +1,4 @@
+cf-tunnel
+Derived from pandaincloud/am-cf-tunnel, ansoncloud8/am-cf-tunnel, and amclubs/am-cf-tunnel.
+Original source attributions are retained in _worker.js and LICENSE.
+Modified in October 2026: repaired subscription sources and TCP fallback; added request isolation, regression tests, required UUID configuration, and independent deployment documentation.
