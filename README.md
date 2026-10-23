@@ -25,6 +25,8 @@ Cloudflare Pages VLESS WebSocket 代理与订阅服务。基于 [am-cf-tunnel](h
 
 ## 订阅地址
 
+订阅请使用项目固定的 pages.dev 域名；含部署编号的域名固定在某次部署，不会自动采用后续修复。
+
 将下列占位内容替换为新项目域名及你的 UUID：
 
 ```text
@@ -62,4 +64,3 @@ node --input-type=module --check < _worker.js
 ## 来源与许可
 
 保留原项目 Apache-2.0 许可及源文件署名，详见 `LICENSE`、`NOTICE`。
-订阅请使用项目固定的 pages.dev 域名；含部署编号的域名固定在某次部署，不会自动采用后续修复。
